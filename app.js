@@ -26,3 +26,6 @@ app.use((req, res, next) => {// permet d'attribuer un middleware à une route, i
   app.use('/images',express.static(path.join(__dirname, 'images')))// apès une requ^tes vers images , on utilise static pour servir le dossier image, on définit //la route avec path.join en indiquant le nom du dossier
   app.use('/api/auth',userRoutes);
   app.use('/api/sauces',saucesRoutes);
+  
+
+  
