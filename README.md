@@ -9,3 +9,19 @@
 On Windows, these installations require to use PowerShell in administrator mode.
 
 Then, clone this repo, run npm install, and run npm install --save-dev run-script-os.
+
+## Needed Packages for nodeJS
+
+- bcrypt
+- express
+- jwt
+- mongoose
+- mongoose-unique-validator
+- multer
+- nodemon
+
+## Usage
+
+
+
+
