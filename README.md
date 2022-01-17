@@ -14,14 +14,17 @@ Then, clone this repo, run npm install, and run `npm install --save-dev run-scri
 
 - bcrypt
 - express
-- jwt
+- jwt (jsonwebtoken)
 - mongoose
 - mongoose-unique-validator
 - multer
 - nodemon
 
 ## Usage
+- `npm init` to start the project. Make sure to start it with `server.js` file.
+- In the terminal : `nodemon server.js` to locally run the server .
 
+In app.js line 10 : paste your mongodb link account to connect mongodb to the project and put your account password in the <PASSWORD> tag . 
 
 
 
