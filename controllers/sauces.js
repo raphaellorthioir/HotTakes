@@ -1,5 +1,6 @@
 const {updateOne, findOne}= require ('../models/sauces')
 const Sauce = require('../models/sauces');
+const { path } = require('../app');
 
 exports.createSauce = (req, res, next) =>{
 
@@ -21,7 +22,7 @@ exports.updateSauce = (req,res, next)=>{
         ...JSON.parse(req.body.sauce), //on récupére la chaîne de caractère
         imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`// on modifie l'Url
      } : {...req.body }; // si le fichier n'existe pas on reprend juste le corp de la requête sans changement de fichier image
-    Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id})
+    Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id})// en paramètre : filter pour retrouver la sauce concernée, ensuite update pour mettre les modifications à appliquer toujours en précisant que l'id qui se trouve en paramètre soit toujours celui de l'id donné par mongoDB
     .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
     .catch(error => res.status(400).json({ error }));
 };
@@ -34,9 +35,9 @@ exports.getAllSauces= (req,res,next)=>{
 
 exports.getOneSauce = (req, res, next)=>{
 
-    Sauce.findOne({_id: req.params.id})
-    .then(sauce =>res.status(200).json(sauce))
-    .catch(error => res.status(400).json({error}));
+    Sauce.findOne({_id: req.params.id}) /* on compare l'id de l'objet à l'id qui est envoyé par le frontend */
+    .then(sauce =>res.status(200).json(sauce)) /* on renvoit un satus 200 pour indiquer le succés et on envoie la réponse en JSON */
+    .catch(error => res.status(400).json({error}));/* on envoit error en JSON avec un statut 400 */
 }
 
 exports.deleteSauce = (req,res, next)=>{
@@ -49,15 +50,18 @@ exports.deleteSauce = (req,res, next)=>{
               error: new Error('No such Thing!')
             });
           }
-          if (sauce.userId !== req.auth.userId) { // permet de vérifier que le user a le droit de supprimer la sauce
+          if (sauce.userId !== req.auth.userId) { 
             res.status(400).json({
               error: new Error('Unauthorized request!')
             });
           }
         })
+
     Sauce.deleteOne({_id: req.params.id})
-    .then(() => res.status(200).json({message: 'Sauce supprimée'}))
+    .then(()=> res.status(200).json({message: 'Sauce supprimée'}))
     .catch(error => res.status(400).json({error}));
+
+    
 }
 
 exports.likeSauce = (req,res, next)=>{
