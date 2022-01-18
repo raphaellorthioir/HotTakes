@@ -7,8 +7,9 @@ module.exports= app; // export de la constante pour y accéder depuis les autres
 const helmet =require('helmet')
 const userRoutes =require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
+require('dotenv').config(); // permet de cacher des variables
 
-mongoose.connect('mongodb+srv://LaStrad:Comedia19912020@cluster0.4ihik.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+mongoose.connect(process.env.MY_MONGO_DB_LINK,
   { useNewUrlParser: true,
     useUnifiedTopology: true })
   .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -43,3 +44,6 @@ app.use((req, res, next) => {// permet d'attribuer un middleware à une route, i
     reportOnly:true,
   })
   );
+
+  
+
