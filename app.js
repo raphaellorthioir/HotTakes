@@ -4,6 +4,7 @@ const mongoose = require('mongoose');// facilite les interactions entre express 
 const path= require('path') // donne accés aux chemins du système de fichier
 const app= express();// création de l'application express qui sera lu par le serveur node
 module.exports= app; // export de la constante pour y accéder depuis les autres fichiers du serveur node
+const helmet =require('helmet')
 const userRoutes =require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
 
@@ -31,6 +32,14 @@ app.use((req, res, next) => {// permet d'attribuer un middleware à une route, i
   app.use('/images',express.static(path.join(__dirname, 'images')))//  requêtes vers le dossier local  '/images' , on utilise static pour servir le dossier image, on définit la route avec path.join en indiquant le nom du dossier
   app.use('/api/auth',userRoutes);
   app.use('/api/sauces',saucesRoutes);
- 
+  app.use(helmet.frameguard({ // évite le click jacking
+    action: "deny",
+  }));
 
-  
+  app.use(helmet.contentSecurityPolicy({
+    directives:{
+      /*... */
+    },
+    reportOnly:true,
+  })
+  );

@@ -1,6 +1,6 @@
 const {updateOne, findOne}= require ('../models/sauces')
 const Sauce = require('../models/sauces');
-const { path } = require('../app');
+const { path, request } = require('../app');
 
 exports.createSauce = (req, res, next) =>{
 
@@ -17,14 +17,22 @@ exports.createSauce = (req, res, next) =>{
 };
 exports.updateSauce = (req,res, next)=>{
 
+  if (req.body.userId !== req.auth.userId) { 
+      res.status(400).json({
+      error: new Error('Unauthorized request!')
+    });}
+    
     const sauceObject = req.file ? // opérateur ternaire pour savoir si req.file existe
     {
         ...JSON.parse(req.body.sauce), //on récupére la chaîne de caractère
         imageUrl:`${req.protocol}://${req.get('host')}/images/${req.file.filename}`// on modifie l'Url
      } : {...req.body }; // si le fichier n'existe pas on reprend juste le corp de la requête sans changement de fichier image
-    Sauce.updateOne({_id: req.params.id}, { ...sauceObject, _id: req.params.id})// en paramètre : filter pour retrouver la sauce concernée, ensuite update pour mettre les modifications à appliquer toujours en précisant que l'id qui se trouve en paramètre soit toujours celui de l'id donné par mongoDB
+  
+    Sauce.updateOne({_id: req.params.id }, { ...sauceObject, _id: req.params.id})// en paramètre : filter pour retrouver la sauce concernée, ensuite update pour mettre les modifications à appliquer toujours en précisant que l'id qui se trouve en paramètre soit toujours celui de l'id donné par mongoDB
+    
     .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
     .catch(error => res.status(400).json({ error }));
+  
 };
 exports.getAllSauces= (req,res,next)=>{
 

@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
+
+
 /*création d'un objet qui servira de base pour la création de users, un id est attribué par mongoose lors de la création d'un nouveau User */
 const userSchema = mongoose.Schema({
     
