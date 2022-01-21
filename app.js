@@ -29,21 +29,13 @@ app.use((req, res, next) => {// permet d'attribuer un middleware à une route, i
 
   app.use(bodyParser.json())
    
- 
+  //app.use(helmet()) // action par défaut pour la sécurité
+  
   app.use('/images',express.static(path.join(__dirname, 'images')))//  requêtes vers le dossier local  '/images' , on utilise static pour servir le dossier image, on définit la route avec path.join en indiquant le nom du dossier
   app.use('/api/auth',userRoutes);
   app.use('/api/sauces',saucesRoutes);
-  app.use(helmet.frameguard({ // évite le click jacking
-    action: "deny",
-  }));
-
-  app.use(helmet.contentSecurityPolicy({
-    directives:{
-      /*... */
-    },
-    reportOnly:true,
-  })
-  );
-
+ 
+ 
+  
   
 

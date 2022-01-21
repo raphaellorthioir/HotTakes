@@ -1,6 +1,8 @@
 const {updateOne, findOne}= require ('../models/sauces')
 const Sauce = require('../models/sauces');
 const { path, request } = require('../app');
+const fs= require('fs')
+const file= require('file-system')
 
 exports.createSauce = (req, res, next) =>{
 
@@ -49,7 +51,8 @@ exports.getOneSauce = (req, res, next)=>{
 }
 
 exports.deleteSauce = (req,res, next)=>{
-
+  
+ 
     Sauce.findOne({ _id: req.params.id })
     .then(
         (sauce) => {
@@ -62,14 +65,25 @@ exports.deleteSauce = (req,res, next)=>{
             res.status(400).json({
               error: new Error('Unauthorized request!')
             });
+            
           }
+          const pathImg = sauce.imageUrl.slice(29);
+          
+          
+            fs.unlink(`./images/${pathImg}`,(err)=>{
+            //file removed
+             if(err) {
+            console.log("erreur")
+            }
+          })
         })
-
+            
+        
+      
+  
     Sauce.deleteOne({_id: req.params.id})
     .then(()=> res.status(200).json({message: 'Sauce supprimée'}))
     .catch(error => res.status(400).json({error}));
-
-    
 }
 
 exports.likeSauce = (req,res, next)=>{
